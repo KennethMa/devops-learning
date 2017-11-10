@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  drone-server:
+    image: drone/drone:0.8
+    ports:
+      - 8081:8000
+    volumes:
+      - ./:/var/lib/drone/
+    restart: always
+    environment:
+      - DRONE_HOST=http://018c370d.ngrok.io
+      - DRONE_OPEN=true
+      - DRONE_SECRET=h6y7tFxBn794oEoA
+      - DRONE_ADMIN=billy,root
+      - DRONE_GITLAB=true
+      - DRONE_GITLAB_CLIENT=e01aaa85b97b6c7cd38419f35a4d1d3493d875a62c7437579f394c3764854ef2
+      - DRONE_GITLAB_SECRET=56ba5ce6eeb53866ac986cb8be89721816d5e75b15f8c520b8346afd6f3a0628
+      - DRONE_GITLAB_URL=http://127c87a9.ngrok.io
+  
+  drone-agent:
+    image: drone/agent:0.8
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_SERVER=drone-server:9000
+      - DRONE_SECRET=h6y7tFxBn794oEoA
+      - DRONE_MAX_PROCS=3

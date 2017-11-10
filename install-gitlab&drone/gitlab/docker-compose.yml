@@ -1,0 +1,16 @@
+web:
+  image: 'gitlab/gitlab-ce:latest'
+  restart: always
+  hostname: '127c87a9.ngrok.io'
+  environment:
+    GITLAB_OMNIBUS_CONFIG: |
+      external_url 'http://127c87a9.ngrok.io'
+      gitlab_rails['backup_path'] = '/data/backups'
+  ports:
+    - '8080:80'
+    - '22:22'
+  volumes:
+    - './gitlab/config:/etc/gitlab'
+    - './gitlab/logs:/var/log/gitlab'
+    - './gitlab/data:/var/opt/gitlab'
+    - './gitlab/backups:/data/backups'
